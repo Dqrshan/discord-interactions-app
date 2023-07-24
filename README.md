@@ -9,7 +9,7 @@ This repository contains a template to build your discord bots following [this g
 │   ├── commands/    -> commands folder
 │   │   ├── hello.ts    -> sample chat input command with options
 │   │   └── modal.ts    -> sample chat input + modal submit
-├── lib/
+│   ├── lib/
 │   │   ├── interfaces.ts    -> interfaces, enums and types
 │   │   └── utils.ts         -> utility functions
 │   └── index.ts     -> main entrypoint for app
