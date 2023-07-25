@@ -83,6 +83,26 @@ app.post('/interactions', async function (req, res) {
             }
         }
     }
+
+    if (type === InteractionType.MESSAGE_COMPONENT) {
+        const { custom_id } = data;
+        const main = custom_id.split('-')[0];
+        const command = commands.get(main);
+        if (command && command.messageComponent) {
+            try {
+                await command.messageComponent(req, res);
+            } catch (error) {
+                console.error(error);
+                res.send({
+                    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                    data: {
+                        content: 'An error occured while executing the command',
+                        flags: InteractionResponseFlags.EPHEMERAL
+                    }
+                });
+            }
+        }
+    }
 });
 
 app.listen(PORT, () => {
