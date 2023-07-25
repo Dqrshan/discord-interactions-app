@@ -1,30 +1,31 @@
 import { Request, Response } from 'express';
-import {
-    ApplicationCommand,
-    ApplicationCommandOptionType
-} from '../lib/interfaces';
+import { ApplicationCommandOptionType } from '../lib/interfaces';
 import { InteractionResponseType } from '@dqrshan/discord-interactions';
+import { Command } from '../lib/command';
 
-const command: ApplicationCommand = {
-    name: 'hello',
-    description: 'Says hello to you',
-    options: [
-        {
-            name: 'name',
-            description: 'Your name',
-            type: ApplicationCommandOptionType.STRING,
-            required: true
-        }
-    ]
-};
+export default abstract class Hello extends Command {
+    constructor() {
+        super({
+            name: 'hello',
+            description: 'Says hello to you',
+            options: [
+                {
+                    name: 'name',
+                    description: 'Your name',
+                    type: ApplicationCommandOptionType.STRING,
+                    required: true
+                }
+            ]
+        });
+    }
 
-const run = (req: Request, res: Response) => {
-    return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-            content: `Hello, ${req.body.data.options[0].value}`
-        }
-    });
-};
-
-export default { command, run };
+    async chatInputRun(req: Request, res: Response) {
+        res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+                content: `Hello, ${req.body.data.options[0].value}`
+            }
+        });
+        return;
+    }
+}
