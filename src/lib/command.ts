@@ -8,7 +8,7 @@ import {
 import { readdirSync } from 'fs';
 import { registerCommands } from './utils';
 
-export abstract class Command {
+export class Command {
     type?: ApplicationCommandType;
     name: string;
     description: string;
@@ -25,15 +25,15 @@ export abstract class Command {
         this.dm_permission = options.dm_permission;
         this.nsfw = options.nsfw;
     }
-    abstract chatInputRun?(req: Request, res: Response): Promise<unknown>;
+    chatInputRun?(req: Request, res: Response): Promise<unknown>;
 
-    abstract contextMenu?(req: Request, res: Response): Promise<unknown>;
+    contextMenu?(req: Request, res: Response): Promise<unknown>;
 
-    abstract modalSubmit?(req: Request, res: Response): Promise<unknown>;
+    modalSubmit?(req: Request, res: Response): Promise<unknown>;
 
-    abstract autoComplete?(req: Request, res: Response): Promise<unknown>;
+    autoComplete?(req: Request, res: Response): Promise<unknown>;
 
-    abstract messageComponent?(req: Request, res: Response): Promise<unknown>;
+    messageComponent?(req: Request, res: Response): Promise<unknown>;
 
     json() {
         return {
@@ -55,7 +55,8 @@ export const loadCommands = () => {
 
     const files = readdirSync('dist/commands').filter((f) => f.endsWith('.js'));
     for (const file of files) {
-        const command: Command = require(`./commands/${file}`).default;
+        const cmd = require(`../commands/${file}`).default;
+        const command = new cmd();
         commands.set(command.name, command);
         globalCommands.push(command.json());
     }
