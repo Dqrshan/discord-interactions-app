@@ -57,3 +57,7 @@ export async function registerCommands(appId: string, commands: any) {
 export function capitalize(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+export function calculateUserDefaultAvatarIndex(userId: any) {
+    return Number(BigInt(userId) >> 22n) % 6;
+}
