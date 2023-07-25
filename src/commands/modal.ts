@@ -5,22 +5,15 @@ import {
     TextInput,
     TextStyle
 } from '@dqrshan/discord-interactions';
-import { ApplicationCommandOptionType } from '../lib/interfaces';
 import { Command } from '../lib/command';
 
 export default abstract class Modal extends Command {
     constructor() {
         super({
-            name: 'hello',
-            description: 'Says hello to you',
-            options: [
-                {
-                    name: 'name',
-                    description: 'Your name',
-                    type: ApplicationCommandOptionType.STRING,
-                    required: true
-                }
-            ]
+            name: 'modal',
+            description: 'Sends a modal',
+            options: [],
+            dm_permission: false
         });
     }
 
@@ -48,15 +41,15 @@ export default abstract class Modal extends Command {
     }
 
     async modalSubmit(req: Request, res: Response) {
-        const { data, member } = req.body;
+        const { data, member, user } = req.body;
         const modalId = data.custom_id;
-        const userId = member.user.id;
+        const name = member ? member.user.global_name : user.global_name;
 
         if (modalId === 'modal') {
             return res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                 data: {
-                    content: `<@${userId}> said: ${data.components[0].components[0].value}`
+                    content: `${name} says: ${data.components[0].components[0].value}`
                 }
             });
         }
